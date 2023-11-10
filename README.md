@@ -9,3 +9,6 @@
 * [004-CrashLoopBackOff-for-Container-blue-gree](docs/004-CrashLoopBackOff-for-Container-blue-gree.md)
 
 
+## A CLoud Guru - CKAD (Certified Kubernetes Application Developer)
+
+* [ACG-CKAD-Lab01 - Using Multiple Containers in a Kubernetes Pod](docs/ACG-CKAD-Lab01-Multiple-Containers-in-a-Pod.md)
