@@ -12,3 +12,4 @@
 ## A CLoud Guru - CKAD (Certified Kubernetes Application Developer)
 
 * [ACG-CKAD-Lab01 - Using Multiple Containers in a Kubernetes Pod](docs/ACG-CKAD-Lab01-Multiple-Containers-in-a-Pod.md)
+* [ACG-CKAD-Lab02 - Using Container Volume Storage in Kubernetes](docs/ACG-CKAD-Lab02-Using-Container-Volume-Storage.md)
