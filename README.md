@@ -14,3 +14,4 @@
 * [ACG-CKAD-Lab01 - Using Multiple Containers in a Kubernetes Pod](docs/ACG-CKAD-Lab01-Multiple-Containers-in-a-Pod.md)
 * [ACG-CKAD-Lab02 - Using Container Volume Storage in Kubernetes](docs/ACG-CKAD-Lab02-Using-Container-Volume-Storage.md)
 * [ACG-CKAD-Lab03 - Advanced Rollout with Kubernetes Deployments](docs/ACG-CKAD-Lab03-Advanced-Rollout-with-Kubernetes-Deployments.md)
+* [ACG-CKAD-Lab04 - Deploying Packaged Kubernetes Apps with Helm](docs/ACG-CKAD-Lab04-Deploying-Packaged-Kubernetes-Apps-with-Helm.md)
