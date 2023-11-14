@@ -15,3 +15,8 @@
 * [ACG-CKAD-Lab02 - Using Container Volume Storage in Kubernetes](docs/ACG-CKAD-Lab02-Using-Container-Volume-Storage.md)
 * [ACG-CKAD-Lab03 - Advanced Rollout with Kubernetes Deployments](docs/ACG-CKAD-Lab03-Advanced-Rollout-with-Kubernetes-Deployments.md)
 * [ACG-CKAD-Lab04 - Deploying Packaged Kubernetes Apps with Helm](docs/ACG-CKAD-Lab04-Deploying-Packaged-Kubernetes-Apps-with-Helm.md)
+
+
+## killercoda.com playground exercise
+
+* [KC001 - Pod with Resource Requests and Limits](docs/KC001P-od-with-Resource-Requests-and-Limits.md)
