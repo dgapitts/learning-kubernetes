@@ -20,3 +20,8 @@
 ## killercoda.com playground exercise
 
 * [KC001 - Pod with Resource Requests and Limits](docs/KC001P-od-with-Resource-Requests-and-Limits.md)
+
+
+## OReilly CKAD labs
+
+* [OReilly-CKAD-001 Pods: Creating and Interacting with a Pod](docs/OReilly-CKAD-001-Creating-Interacting-with-Pod.md)
