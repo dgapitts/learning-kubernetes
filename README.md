@@ -25,3 +25,4 @@
 ## OReilly CKAD labs
 
 * [OReilly-CKAD-001 Pods: Creating and Interacting with a Pod](docs/OReilly-CKAD-001-Creating-Interacting-with-Pod.md)
+* [OReilly-CKAD-002 Creating a Pod that Uses a Custom Command](docs/OReilly-CKAD-002-Creating-Pod-that-Uses-Custom-Command.md)
