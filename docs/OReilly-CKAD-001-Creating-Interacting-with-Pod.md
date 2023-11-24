@@ -7,6 +7,17 @@ Ref:
 * https://jamesdefabia.github.io/docs/user-guide/simple-nginx/
 
 
+## Highlights
+
+Use `loop` to keep checking the pod status
+```
+kubectl get pod loop --namespace=ckad
+```
+
+To download the logs, use a simple logs command:
+```
+$ kubectl logs nginx --namespace=ckad
+```
 
 
 
