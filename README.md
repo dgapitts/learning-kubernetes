@@ -28,3 +28,8 @@
 * [2.2 Creating a Pod that Uses a Custom Command](docs/OReilly-CKAD-002-Creating-Pod-that-Uses-Custom-Command.md)
 * [2.3 Modifying the Configuration of an Existing Pod](docs/OReilly-CKAD-003-Pods-Modifying-the-Config.md)
 * [3.1 Creating and Consume a Secret as an Environment Variable](docs/OReilly-CKAD-004-Creating-Secrets-and-Consuming-as-env-var.md)
+
+
+## OReilly CKAD labs
+
+* [Ch03 builing etcd-operator cluster](docs/Ch03-builing-etcd-operator.md)
