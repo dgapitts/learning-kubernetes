@@ -257,3 +257,181 @@ NAME                              READY   STATUS     RESTARTS   AGE
 etcd-operator-5f98c6c6c5-7992p    1/1     Running    0          8m2s
 example-etcd-cluster-bczmh22ph8   0/1     Init:0/1   0          6m44s
 ```
+
+
+## Debugging PodInitializing problem
+
+Nothing obviously wrong here:
+```
+ch03 % kubectl describe pods
+Name:             etcd-operator-5f98c6c6c5-7992p
+Namespace:        default
+Priority:         0
+Service Account:  etcd-operator-sa
+Node:             ch03-control-plane/172.19.0.2
+Start Time:       Wed, 24 Jan 2024 18:26:53 +0100
+Labels:           app=etcd-operator
+                  pod-template-hash=5f98c6c6c5
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.5
+IPs:
+  IP:           10.244.0.5
+Controlled By:  ReplicaSet/etcd-operator-5f98c6c6c5
+Containers:
+  etcd-operator:
+    Container ID:  containerd://7fcac7c7f34b038e8a923a3b5f96764a205f3c00efad2fdfb373e3f58f3733a0
+    Image:         quay.io/coreos/etcd-operator:v0.9.4
+    Image ID:      sha256:d72ca3c4ecd4570ae8f5e9377b12a6988e48302853b372b447c4738b5ef595b4
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      etcd-operator
+      --create-crd=false
+    State:          Running
+      Started:      Wed, 24 Jan 2024 18:27:06 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      MY_POD_NAMESPACE:  default (v1:metadata.namespace)
+      MY_POD_NAME:       etcd-operator-5f98c6c6c5-7992p (v1:metadata.name)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-djxlm (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  kube-api-access-djxlm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  18m   default-scheduler  Successfully assigned default/etcd-operator-5f98c6c6c5-7992p to ch03-control-plane
+  Normal  Pulling    18m   kubelet            Pulling image "quay.io/coreos/etcd-operator:v0.9.4"
+  Normal  Pulled     18m   kubelet            Successfully pulled image "quay.io/coreos/etcd-operator:v0.9.4" in 13.394475797s (13.394491339s including waiting)
+  Normal  Created    18m   kubelet            Created container etcd-operator
+  Normal  Started    18m   kubelet            Started container etcd-operator
+
+
+Name:             example-etcd-cluster-bczmh22ph8
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             ch03-control-plane/172.19.0.2
+Start Time:       Wed, 24 Jan 2024 18:28:11 +0100
+Labels:           app=etcd
+                  etcd_cluster=example-etcd-cluster
+                  etcd_node=example-etcd-cluster-bczmh22ph8
+Annotations:      etcd.version: 3.1.10
+Status:           Pending
+IP:               10.244.0.6
+IPs:
+  IP:           10.244.0.6
+Controlled By:  EtcdCluster/example-etcd-cluster
+Init Containers:
+  check-dns:
+    Container ID:  containerd://6b42c1178cd552401dca0c6e180379d17b3e55d4462c3cca5cd7b316c26ff124
+    Image:         busybox:1.28.0-glibc
+    Image ID:      docker.io/library/busybox@sha256:0b55a30394294ab23b9afd58fab94e61a923f5834fba7ddbae7f8e0c11ba85e6
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      /bin/sh
+      -c
+
+                TIMEOUT_READY=0
+                while ( ! nslookup example-etcd-cluster-bczmh22ph8.example-etcd-cluster.default.svc )
+                do
+                  # If TIMEOUT_READY is 0 we should never time out and exit
+                  TIMEOUT_READY=$(( TIMEOUT_READY-1 ))
+                              if [ $TIMEOUT_READY -eq 0 ];
+                                  then
+                                      echo "Timed out waiting for DNS entry"
+                                      exit 1
+                                  fi
+                              sleep 1
+                            done
+    State:          Running
+      Started:      Wed, 24 Jan 2024 18:28:15 +0100
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:         <none>
+Containers:
+  etcd:
+    Container ID:
+    Image:         :v3.1.10
+    Image ID:
+    Ports:         2380/TCP, 2379/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Command:
+      /usr/local/bin/etcd
+      --data-dir=/var/etcd/data
+      --name=example-etcd-cluster-bczmh22ph8
+      --initial-advertise-peer-urls=http://example-etcd-cluster-bczmh22ph8.example-etcd-cluster.default.svc:2380
+      --listen-peer-urls=http://0.0.0.0:2380
+      --listen-client-urls=http://0.0.0.0:2379
+      --advertise-client-urls=http://example-etcd-cluster-bczmh22ph8.example-etcd-cluster.default.svc:2379
+      --initial-cluster=example-etcd-cluster-bczmh22ph8=http://example-etcd-cluster-bczmh22ph8.example-etcd-cluster.default.svc:2380
+      --initial-cluster-state=new
+      --initial-cluster-token=487efdeb-7b74-47c3-91de-3abe26e882b7
+    State:          Waiting
+      Reason:       PodInitializing
+    Ready:          False
+    Restart Count:  0
+    Liveness:       exec [/bin/sh -ec ETCDCTL_API=3 etcdctl endpoint status] delay=10s timeout=10s period=60s #success=1 #failure=3
+    Readiness:      exec [/bin/sh -ec ETCDCTL_API=3 etcdctl endpoint status] delay=1s timeout=5s period=5s #success=1 #failure=3
+    Environment:    <none>
+    Mounts:
+      /var/etcd from etcd-data (rw)
+Conditions:
+  Type              Status
+  Initialized       False
+  Ready             False
+  ContainersReady   False
+  PodScheduled      True
+Volumes:
+  etcd-data:
+    Type:        EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:   <unset>
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  17m   default-scheduler  Successfully assigned default/example-etcd-cluster-bczmh22ph8 to ch03-control-plane
+  Normal  Pulling    17m   kubelet            Pulling image "busybox:1.28.0-glibc"
+  Normal  Pulled     17m   kubelet            Successfully pulled image "busybox:1.28.0-glibc" in 3.287030085s (3.287048251s including waiting)
+  Normal  Created    17m   kubelet            Created container check-dns
+  Normal  Started    17m   kubelet            Started container check-dns
+```
+
+but checking logs
+
+```
+davidpitts@Davids-MacBook-Pro ch03 % kubectl logs example-etcd-cluster-bczmh22ph8
+Defaulted container "etcd" out of: etcd, check-dns (init)
+Error from server (BadRequest): container "etcd" in pod "example-etcd-cluster-bczmh22ph8" is waiting to start: PodInitializing
+```
+
+and this appears to match [this coreos/etcd-operator known issue](https://github.com/coreos/etcd-operator/issues/2077):
+
+> After change from flannel network to calico, this not happen more. Try switch network.
+
+and
+
+> please investigate events in kubectl cluster, especially from etcd pods, there should be an info why pod is still in initializing state. Usually it's related to insufficient resources (too high cpu/memory requests per pod), or incorrectly configured storage (for example pod in in zone A while PV was created in zone B, thus you should create new storageclass with volumeBindingMode: WaitForFirstConsumer).
